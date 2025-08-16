@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThriftSave - Contribution Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        .pulse-green { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0%, 100% { background-color: rgb(34, 197, 94); } 50% { background-color: rgb(22, 163, 74); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg border-b-4 border-green-500 dark:border-green-400 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-green-600 p-2 rounded-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">ThriftSave</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Contribution Management System</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Total Pool</p>
+                        <p class="text-xl font-bold text-green-600 dark:text-green-400" id="totalPool">$0.00</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Active Members</p>
+                        <p class="text-xl font-bold text-blue-600 dark:text-blue-400" id="activeMembers">0</p>
+                    </div>
+                    <!-- Theme Toggle Switch -->
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <button id="themeToggle" class="relative w-14 h-7 bg-gray-300 dark:bg-gray-600 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <div id="toggleCircle" class="absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center">
+                                    <svg id="sunIcon" class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <svg id="moonIcon" class="w-4 h-4 text-gray-700 hidden" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="bg-green-100 dark:bg-green-800 p-2 rounded-full">
+                            <svg class="w-6 h-6 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 0h4m6 0a2 2 0 002-2V9a2 2 0 00-2-2h-2m-6 0V7a2 2 0 012-2h4a2 2 0 012 2v2m-6 0h4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Navigation Tabs -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-8 overflow-hidden transition-colors duration-300">
+            <nav class="flex space-x-0">
+                <button onclick="showTab('members')" id="tab-members" class="tab-button flex-1 px-6 py-4 text-center font-medium transition-all duration-200 bg-green-600 text-white">
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                    </svg>
+                    Members
+                </button>
+                <button onclick="showTab('contributions')" id="tab-contributions" class="tab-button flex-1 px-6 py-4 text-center font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Contributions
+                </button>
+                <button onclick="showTab('loans')" id="tab-loans" class="tab-button flex-1 px-6 py-4 text-center font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                    </svg>
+                    Loans
+                </button>
+                <button onclick="showTab('reports')" id="tab-reports" class="tab-button flex-1 px-6 py-4 text-center font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Reports
+                </button>
+            </nav>
+        </div>
+
+        <!-- Members Tab -->
+        <div id="members-tab" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Add Member Form -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center transition-colors duration-300">
+                            <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                            Add New Member
+                        </h3>
+                        <form id="addMemberForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                                <input type="text" id="memberName" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="John Doe" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Member ID</label>
+                                <input type="text" id="memberId" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="TSV001" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                                <input type="tel" id="memberPhone" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="(555) 123-4567" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input type="email" id="memberEmail" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="john@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Monthly Contribution</label>
+                                <input type="number" id="monthlyContribution" step="0.01" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="100.00" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
+                                <textarea id="memberAddress" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300" placeholder="123 Main St, City, State"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium">
+                                Add Member
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Members List -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Members Directory</h3>
+                            <input type="text" id="searchMembers" placeholder="Search members..." class="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-300">
+                        </div>
+                        <div id="membersList" class="space-y-4">
+                            <p class="text-gray-500 text-center py-8">No members registered yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contributions Tab -->
+        <div id="contributions-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Record Contribution -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Record Contribution
+                    </h3>
+                    <form id="addContributionForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Member</label>
+                            <select id="contributionMember" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="">Choose a member</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contribution Amount</label>
+                            <input type="number" id="contributionAmount" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="100.00" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contribution Type</label>
+                            <select id="contributionType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="">Select type</option>
+                                <option value="monthly">Monthly Contribution</option>
+                                <option value="special">Special Contribution</option>
+                                <option value="penalty">Penalty Payment</option>
+                                <option value="interest">Interest Payment</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                            <select id="paymentMethod" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="cash">Cash</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="mobile_money">Mobile Money</option>
+                                <option value="check">Check</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                            <textarea id="contributionNotes" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Additional notes..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                            Record Contribution
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Recent Contributions -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900">Recent Contributions</h3>
+                        <select id="contributionFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">All Members</option>
+                        </select>
+                    </div>
+                    <div id="contributionsList" class="space-y-4 max-h-96 overflow-y-auto">
+                        <p class="text-gray-500 text-center py-8">No contributions recorded yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loans Tab -->
+        <div id="loans-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Issue Loan -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                        </svg>
+                        Issue New Loan
+                    </h3>
+                    <form id="addLoanForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Member</label>
+                            <select id="loanMember" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+                                <option value="">Choose a member</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount</label>
+                            <input type="number" id="loanAmount" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="1000.00" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+                                <input type="number" id="interestRate" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="5.0" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duration (months)</label>
+                                <input type="number" id="loanDuration" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="12" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Purpose</label>
+                            <select id="loanPurpose" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+                                <option value="">Select purpose</option>
+                                <option value="business">Business Investment</option>
+                                <option value="education">Education</option>
+                                <option value="medical">Medical Emergency</option>
+                                <option value="housing">Housing</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Guarantor 1</label>
+                            <select id="guarantor1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+                                <option value="">Choose guarantor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Guarantor 2</label>
+                            <select id="guarantor2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                <option value="">Choose guarantor (optional)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium">
+                            Issue Loan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Active Loans -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-900">Active Loans</h3>
+                        <select id="loanStatusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            <option value="">All Loans</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                    <div id="loansList" class="space-y-4 max-h-96 overflow-y-auto">
+                        <p class="text-gray-500 text-center py-8">No loans issued yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Repayment Section -->
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Record Loan Repayment
+                </h3>
+                <form id="repaymentForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Loan</label>
+                        <select id="repaymentLoan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                            <option value="">Choose active loan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Repayment Amount</label>
+                        <input type="number" id="repaymentAmount" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="100.00" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                        <select id="repaymentMethod" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                            <option value="cash">Cash</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="mobile_money">Mobile Money</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium">
+                            Record Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                <!-- Summary Cards -->
+                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100">Total Contributions</p>
+                            <p class="text-2xl font-bold" id="totalContributions">$0.00</p>
+                        </div>
+                        <svg class="w-8 h-8 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100">Active Loans</p>
+                            <p class="text-2xl font-bold" id="activeLoansCount">0</p>
+                        </div>
+                        <svg class="w-8 h-8 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100">Outstanding Loans</p>
+                            <p class="text-2xl font-bold" id="outstandingLoans">$0.00</p>
+                        </div>
+                        <svg class="w-8 h-8 text-orange-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100">Interest Earned</p>
+                            <p class="text-2xl font-bold" id="interestEarned">$0.00</p>
+                        </div>
+                        <svg class="w-8 h-8 text-purple-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Performance -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Top Contributors</h3>
+                    <div id="topContributors" class="space-y-4">
+                        <p class="text-gray-500 text-center py-8">No contribution data available</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Loan Summary</h3>
+                    <div id="loanSummary" class="space-y-4">
+                        <p class="text-gray-500 text-center py-8">No loan data available</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Contribution Status -->
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">Monthly Contribution Status</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Member</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Expected</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Paid</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Balance</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyStatusTable" class="divide-y divide-gray-200">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let members = [];
+        let contributions = [];
+        let loans = [];
+        let repayments = [];
+        let nextMemberId = 1;
+        let nextContributionId = 1;
+        let nextLoanId = 1;
+
+        // Initialize with sample data
+        function initializeSampleData() {
+            const sampleMembers = [
+                {
+                    id: nextMemberId++,
+                    memberId: "TSV001",
+                    name: "Abass Shuaib",
+                    phone: "+249057344918",
+                    email: "abasshuaib535@gmail.com",
+                    monthlyContribution: 150.00,
+                    address: "No 7 Amuloko Road, Ibadan",
+                    joinDate: new Date().toISOString(),
+                    status: "active"
+                },
+                {
+                    id: nextMemberId++,
+                    memberId: "TSV002",
+                    name: "Abass Gbolahan",
+                    phone: "+2348169790443",
+                    email: "abassgbolahan535@gmail.com",
+                    monthlyContribution: 200.00,
+                    address: "OGITECH Igbesa, ogun State",
+                    joinDate: new Date().toISOString(),
+                    status: "active"
+                },
+                {
+                    id: nextMemberId++,
+                    memberId: "TSV003",
+                    name: "Abass Abdullah",
+                    phone: "+1 553465",
+                    email: "abassabdullah001@gmail.com",
+                    monthlyContribution: 100.00,
+                    address: "789 Pine, Canada",
+                    joinDate: new Date().toISOString(),
+                    status: "active"
+                }
+            ];
+
+            members = sampleMembers;
+            updateMembersDisplay();
+            updateMemberDropdowns();
+            updateHeaderStats();
+            updateReports();
+        }
+
+        // Tab Management
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('bg-green-600', 'text-white');
+                btn.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+            });
+            
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            document.getElementById(tabName + '-tab').classList.add('fade-in');
+            
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+            activeBtn.classList.add('bg-green-600', 'text-white');
+
+            if (tabName === 'reports') {
+                updateReports();
+            }
+        }
+
+        // Member Management
+        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const memberIdValue = document.getElementById('memberId').value;
+            if (members.find(m => m.memberId === memberIdValue)) {
+                showNotification('Member ID already exists!', 'error');
+                return;
+            }
+            
+            const member = {
+                id: nextMemberId++,
+                memberId: memberIdValue,
+                name: document.getElementById('memberName').value,
+                phone: document.getElementById('memberPhone').value,
+                email: document.getElementById('memberEmail').value,
+                monthlyContribution: parseFloat(document.getElementById('monthlyContribution').value),
+                address: document.getElementById('memberAddress').value,
+                joinDate: new Date().toISOString(),
+                status: 'active'
+            };
+            
+            members.push(member);
+            updateMembersDisplay();
+            updateMemberDropdowns();
+            updateHeaderStats();
+            updateReports();
+            this.reset();
+            
+            showNotification('Member added successfully!', 'success');
+        });
+
+        function updateMembersDisplay() {
+            const container = document.getElementById('membersList');
+            const searchTerm = document.getElementById('searchMembers').value.toLowerCase();
+            
+            let filteredMembers = members.filter(member => 
+                member.name.toLowerCase().includes(searchTerm) ||
+                member.memberId.toLowerCase().includes(searchTerm) ||
+                member.phone.includes(searchTerm)
+            );
+            
+            if (filteredMembers.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No members found</p>';
+                return;
+            }
+            
+            container.innerHTML = filteredMembers.map(member => {
+                const totalContributions = contributions
+                    .filter(c => c.memberId === member.id)
+                    .reduce((sum, c) => sum + c.amount, 0);
+                
+                const activeLoans = loans.filter(l => l.memberId === member.id && l.status === 'active').length;
+                
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-3 mb-2">
+                                    <h4 class="font-bold text-gray-900">${member.name}</h4>
+                                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">${member.memberId}</span>
+                                </div>
+                                <div class="space-y-1 text-sm text-gray-600">
+                                    <p>📞 ${member.phone}</p>
+                                    ${member.email ? `<p>📧 ${member.email}</p>` : ''}
+                                    <p>💰 Monthly: $${member.monthlyContribution.toFixed(2)}</p>
+                                    ${member.address ? `<p>📍 ${member.address}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="space-y-2">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Total Contributions</p>
+                                        <p class="font-bold text-green-600">$${totalContributions.toFixed(2)}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">Active Loans</p>
+                                        <p class="font-bold text-orange-600">${activeLoans}</p>
+                                    </div>
+                                </div>
+                                <button onclick="deleteMember(${member.id})" class="mt-2 text-red-600 hover:text-red-800 text-sm">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteMember(memberId) {
+            if (confirm('Are you sure you want to remove this member?')) {
+                members = members.filter(member => member.id !== memberId);
+                updateMembersDisplay();
+                updateMemberDropdowns();
+                updateHeaderStats();
+                updateReports();
+                showNotification('Member removed successfully!', 'success');
+            }
+        }
+
+        function updateMemberDropdowns() {
+            const selects = ['contributionMember', 'contributionFilter', 'loanMember', 'guarantor1', 'guarantor2'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                const currentValue = select.value;
+                const isGuarantor = selectId.includes('guarantor');
+                
+                let options = '<option value="">Choose a member</option>';
+                if (selectId === 'contributionFilter') {
+                    options = '<option value="">All Members</option>';
+                }
+                
+                options += members.map(member => 
+                    `<option value="${member.id}">${member.name} (${member.memberId})</option>`
+                ).join('');
+                
+                select.innerHTML = options;
+                select.value = currentValue;
+            });
+            
+            updateActiveLoanDropdown();
+        }
+
+        document.getElementById('searchMembers').addEventListener('input', updateMembersDisplay);
+
+        // Contribution Management
+        document.getElementById('addContributionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const contribution = {
+                id: nextContributionId++,
+                memberId: parseInt(document.getElementById('contributionMember').value),
+                amount: parseFloat(document.getElementById('contributionAmount').value),
+                type: document.getElementById('contributionType').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                notes: document.getElementById('contributionNotes').value,
+                date: new Date().toISOString()
+            };
+            
+            contributions.push(contribution);
+            updateContributionsDisplay();
+            updateHeaderStats();
+            updateReports();
+            this.reset();
+            
+            showNotification('Contribution recorded successfully!', 'success');
+        });
+
+        function updateContributionsDisplay() {
+            const container = document.getElementById('contributionsList');
+            const filterMemberId = document.getElementById('contributionFilter').value;
+            
+            let filteredContributions = contributions;
+            if (filterMemberId) {
+                filteredContributions = contributions.filter(c => c.memberId === parseInt(filterMemberId));
+            }
+            
+            const recentContributions = filteredContributions.slice(-20).reverse();
+            
+            if (recentContributions.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No contributions recorded yet</p>';
+                return;
+            }
+            
+            container.innerHTML = recentContributions.map(contribution => {
+                const member = members.find(m => m.id === contribution.memberId);
+                const date = new Date(contribution.date).toLocaleDateString();
+                
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-medium text-gray-900">${member ? member.name : 'Unknown Member'}</h4>
+                                <p class="text-sm text-gray-500">${member ? member.memberId : ''} • ${date}</p>
+                                <p class="text-sm text-gray-600 mt-1">${contribution.type.replace('_', ' ').toUpperCase()}</p>
+                                ${contribution.notes ? `<p class="text-sm text-gray-500 mt-1">${contribution.notes}</p>` : ''}
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-green-600">$${contribution.amount.toFixed(2)}</p>
+                                <p class="text-sm text-gray-500">${contribution.paymentMethod.replace('_', ' ')}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('contributionFilter').addEventListener('change', updateContributionsDisplay);
+
+        // Loan Management
+        document.getElementById('addLoanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const memberId = parseInt(document.getElementById('loanMember').value);
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const duration = parseInt(document.getElementById('loanDuration').value);
+            
+            const totalInterest = (amount * interestRate * duration) / 100;
+            const totalAmount = amount + totalInterest;
+            const monthlyPayment = totalAmount / duration;
+            
+            const loan = {
+                id: nextLoanId++,
+                memberId: memberId,
+                amount: amount,
+                interestRate: interestRate,
+                duration: duration,
+                totalInterest: totalInterest,
+                totalAmount: totalAmount,
+                monthlyPayment: monthlyPayment,
+                remainingBalance: totalAmount,
+                purpose: document.getElementById('loanPurpose').value,
+                guarantor1: parseInt(document.getElementById('guarantor1').value),
+                guarantor2: document.getElementById('guarantor2').value ? parseInt(document.getElementById('guarantor2').value) : null,
+                issueDate: new Date().toISOString(),
+                dueDate: new Date(Date.now() + duration * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'active'
+            };
+            
+            loans.push(loan);
+            updateLoansDisplay();
+            updateActiveLoanDropdown();
+            updateHeaderStats();
+            updateReports();
+            this.reset();
+            
+            showNotification(`Loan of $${amount.toFixed(2)} issued successfully!`, 'success');
+        });
+
+        function updateLoansDisplay() {
+            const container = document.getElementById('loansList');
+            const statusFilter = document.getElementById('loanStatusFilter').value;
+            
+            let filteredLoans = loans;
+            if (statusFilter) {
+                filteredLoans = loans.filter(l => l.status === statusFilter);
+            }
+            
+            if (filteredLoans.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No loans found</p>';
+                return;
+            }
+            
+            container.innerHTML = filteredLoans.map(loan => {
+                const member = members.find(m => m.id === loan.memberId);
+                const guarantor1 = members.find(m => m.id === loan.guarantor1);
+                const guarantor2 = loan.guarantor2 ? members.find(m => m.id === loan.guarantor2) : null;
+                const issueDate = new Date(loan.issueDate).toLocaleDateString();
+                const dueDate = new Date(loan.dueDate).toLocaleDateString();
+                const progress = ((loan.totalAmount - loan.remainingBalance) / loan.totalAmount) * 100;
+                
+                return `
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-medium text-gray-900">${member ? member.name : 'Unknown Member'}</h4>
+                                <p class="text-sm text-gray-500">Loan #${loan.id} • ${loan.purpose}</p>
+                                <p class="text-sm text-gray-500">Issued: ${issueDate} • Due: ${dueDate}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-orange-600">$${loan.amount.toFixed(2)}</p>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full ${
+                                    loan.status === 'active' ? 'bg-orange-100 text-orange-800' :
+                                    loan.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                    'bg-red-100 text-red-800'
+                                }">${loan.status.toUpperCase()}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-sm mb-3">
+                            <div>
+                                <p class="text-gray-500">Interest Rate: ${loan.interestRate}%</p>
+                                <p class="text-gray-500">Duration: ${loan.duration} months</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">Monthly Payment: $${loan.monthlyPayment.toFixed(2)}</p>
+                                <p class="text-gray-500">Remaining: $${loan.remainingBalance.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Repayment Progress</span>
+                                <span>${progress.toFixed(1)}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-sm text-gray-600">
+                            <p>Guarantors: ${guarantor1 ? guarantor1.name : 'Unknown'}${guarantor2 ? `, ${guarantor2.name}` : ''}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateActiveLoanDropdown() {
+            const select = document.getElementById('repaymentLoan');
+            const activeLoans = loans.filter(l => l.status === 'active' && l.remainingBalance > 0);
+            
+            select.innerHTML = '<option value="">Choose active loan</option>' +
+                activeLoans.map(loan => {
+                    const member = members.find(m => m.id === loan.memberId);
+                    return `<option value="${loan.id}">${member ? member.name : 'Unknown'} - Loan #${loan.id} ($${loan.remainingBalance.toFixed(2)})</option>`;
+                }).join('');
+        }
+
+        document.getElementById('loanStatusFilter').addEventListener('change', updateLoansDisplay);
+
+        // Loan Repayment
+        document.getElementById('repaymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const loanId = parseInt(document.getElementById('repaymentLoan').value);
+            const amount = parseFloat(document.getElementById('repaymentAmount').value);
+            const method = document.getElementById('repaymentMethod').value;
+            
+            const loan = loans.find(l => l.id === loanId);
+            if (!loan) {
+                showNotification('Loan not found!', 'error');
+                return;
+            }
+            
+            if (amount > loan.remainingBalance) {
+                showNotification('Repayment amount exceeds remaining balance!', 'error');
+                return;
+            }
+            
+            const repayment = {
+                id: repayments.length + 1,
+                loanId: loanId,
+                amount: amount,
+                method: method,
+                date: new Date().toISOString()
+            };
+            
+            repayments.push(repayment);
+            loan.remainingBalance -= amount;
+            
+            if (loan.remainingBalance <= 0.01) {
+                loan.status = 'completed';
+                loan.remainingBalance = 0;
+            }
+            
+            updateLoansDisplay();
+            updateActiveLoanDropdown();
+            updateHeaderStats();
+            updateReports();
+            this.reset();
+            
+            showNotification(`Repayment of $${amount.toFixed(2)} recorded successfully!`, 'success');
+        });
+
+        // Header Stats
+        function updateHeaderStats() {
+            const totalPool = contributions.reduce((sum, c) => sum + c.amount, 0) - 
+                             loans.filter(l => l.status === 'active').reduce((sum, l) => sum + (l.amount - l.remainingBalance), 0);
+            const activeMembers = members.filter(m => m.status === 'active').length;
+            
+            document.getElementById('totalPool').textContent = `$${totalPool.toFixed(2)}`;
+            document.getElementById('activeMembers').textContent = activeMembers;
+        }
+
+        // Reports
+        function updateReports() {
+            const totalContributions = contributions.reduce((sum, c) => sum + c.amount, 0);
+            const activeLoansCount = loans.filter(l => l.status === 'active').length;
+            const outstandingLoans = loans.filter(l => l.status === 'active').reduce((sum, l) => sum + l.remainingBalance, 0);
+            const interestEarned = repayments.reduce((sum, r) => {
+                const loan = loans.find(l => l.id === r.loanId);
+                return sum + (r.amount * (loan ? loan.interestRate / 100 : 0));
+            }, 0);
+            
+            document.getElementById('totalContributions').textContent = `$${totalContributions.toFixed(2)}`;
+            document.getElementById('activeLoansCount').textContent = activeLoansCount;
+            document.getElementById('outstandingLoans').textContent = `$${outstandingLoans.toFixed(2)}`;
+            document.getElementById('interestEarned').textContent = `$${interestEarned.toFixed(2)}`;
+            
+            updateTopContributors();
+            updateLoanSummary();
+            updateMonthlyStatus();
+        }
+
+        function updateTopContributors() {
+            const container = document.getElementById('topContributors');
+            const memberContributions = {};
+            
+            contributions.forEach(c => {
+                if (!memberContributions[c.memberId]) {
+                    memberContributions[c.memberId] = 0;
+                }
+                memberContributions[c.memberId] += c.amount;
+            });
+            
+            const sorted = Object.entries(memberContributions)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No contribution data available</p>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map(([memberId, total], index) => {
+                const member = members.find(m => m.id === parseInt(memberId));
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-bold text-green-600">${index + 1}</span>
+                            </div>
+                            <div>
+                                <p class="font-medium">${member ? member.name : 'Unknown'}</p>
+                                <p class="text-sm text-gray-500">${member ? member.memberId : ''}</p>
+                            </div>
+                        </div>
+                        <p class="font-bold text-green-600">$${total.toFixed(2)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateLoanSummary() {
+            const container = document.getElementById('loanSummary');
+            const loanStats = {
+                total: loans.length,
+                active: loans.filter(l => l.status === 'active').length,
+                completed: loans.filter(l => l.status === 'completed').length,
+                overdue: loans.filter(l => l.status === 'overdue').length
+            };
+            
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                        <span class="text-blue-700">Total Loans</span>
+                        <span class="font-bold text-blue-700">${loanStats.total}</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                        <span class="text-orange-700">Active Loans</span>
+                        <span class="font-bold text-orange-700">${loanStats.active}</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                        <span class="text-green-700">Completed Loans</span>
+                        <span class="font-bold text-green-700">${loanStats.completed}</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <span class="text-red-700">Overdue Loans</span>
+                        <span class="font-bold text-red-700">${loanStats.overdue}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateMonthlyStatus() {
+            const tbody = document.getElementById('monthlyStatusTable');
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyData = members.map(member => {
+                const monthlyContributions = contributions.filter(c => 
+                    c.memberId === member.id &&
+                    new Date(c.date).getMonth() === currentMonth &&
+                    new Date(c.date).getFullYear() === currentYear &&
+                    c.type === 'monthly'
+                ).reduce((sum, c) => sum + c.amount, 0);
+                
+                const expected = member.monthlyContribution;
+                const balance = expected - monthlyContributions;
+                const status = balance <= 0 ? 'Paid' : balance < expected ? 'Partial' : 'Pending';
+                
+                return { member, expected, paid: monthlyContributions, balance, status };
+            });
+            
+            tbody.innerHTML = monthlyData.map(data => `
+                <tr>
+                    <td class="px-4 py-3">
+                        <div>
+                            <p class="font-medium">${data.member.name}</p>
+                            <p class="text-sm text-gray-500">${data.member.memberId}</p>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 font-medium">$${data.expected.toFixed(2)}</td>
+                    <td class="px-4 py-3 font-medium text-green-600">$${data.paid.toFixed(2)}</td>
+                    <td class="px-4 py-3 font-medium ${data.balance > 0 ? 'text-red-600' : 'text-green-600'}">
+                        $${Math.abs(data.balance).toFixed(2)}
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${
+                            data.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                            data.status === 'Partial' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }">${data.status}</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Theme Management
+        function initializeTheme() {
+            try {
+                const savedTheme = localStorage.getItem('thriftSaveTheme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    setTimeout(() => updateThemeToggle(true), 100);
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    setTimeout(() => updateThemeToggle(false), 100);
+                }
+            } catch (error) {
+                console.log('Theme initialization error:', error);
+                document.documentElement.classList.remove('dark');
+                setTimeout(() => updateThemeToggle(false), 100);
+            }
+        }
+
+        function toggleTheme() {
+            try {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+                
+                if (isDark) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('thriftSaveTheme', 'light');
+                    updateThemeToggle(false);
+                    showNotification('Switched to light mode ☀️', 'success');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('thriftSaveTheme', 'dark');
+                    updateThemeToggle(true);
+                    showNotification('Switched to dark mode 🌙', 'success');
+                }
+            } catch (error) {
+                console.log('Theme toggle error:', error);
+                showNotification('Theme toggle failed', 'error');
+            }
+        }
+
+        function updateThemeToggle(isDark) {
+            try {
+                const toggleButton = document.getElementById('themeToggle');
+                const toggleCircle = document.getElementById('toggleCircle');
+                const sunIcon = document.getElementById('sunIcon');
+                const moonIcon = document.getElementById('moonIcon');
+                
+                if (!toggleButton || !toggleCircle || !sunIcon || !moonIcon) {
+                    console.log('Theme toggle elements not found');
+                    return;
+                }
+                
+                if (isDark) {
+                    toggleButton.classList.remove('bg-gray-300');
+                    toggleButton.classList.add('bg-gray-600');
+                    toggleCircle.style.transform = 'translateX(1.75rem)';
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    toggleButton.classList.remove('bg-gray-600');
+                    toggleButton.classList.add('bg-gray-300');
+                    toggleCircle.style.transform = 'translateX(0)';
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            } catch (error) {
+                console.log('Theme toggle update error:', error);
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+            initializeSampleData();
+            
+            // Add theme toggle event listener
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96fcb8ea54ebbea3',t:'MTc1NTMwMzE2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
